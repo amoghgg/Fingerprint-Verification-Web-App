@@ -9,4 +9,4 @@ This web app simulates a complete fingerprint capture and matching process using
 - Responsive UI for mobile and desktop
 
 ## Note
-The BioPass ID API integration is pendin
+The BioPass ID API integration is pending.
