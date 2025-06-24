@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fingerprint Verification</title>
+
+  <!-- TensorFlow Handpose -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      max-width: 400px;
+      margin: auto;
+    }
+
+    video, img, canvas {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+
+    #guide-box {
+      position: absolute;
+      border: 2px dashed #1e88e5;
+      width: 100px;
+      height: 100px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      border-radius: 8px;
+    }
+
+    button {
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      margin: 0.5rem;
+      cursor: pointer;
+    }
+
+    #thumb-demo {
+      margin-top: 1rem;
+      width: 80%;
+      border-radius: 8px;
+    }
+
+    .video-container {
+      position: relative;
+    }
+
+    #instruction {
+      font-weight: 500;
+      color: #333;
+    }
+
+    #response {
+      text-align: left;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      margin-top: 1rem;
+    }
+
+    #local-save {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    #fingerprint-name {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 80%;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fingerprint Verification</h1>
+    <input type="file" id="fingerprint-input" accept="image/png, image/jpeg" />
+
+    <p id="instruction">📍 Place your thumb in the center box</p>
+    <img id="thumb-demo" src="thumb-demo.png" alt="Thumb Demo" />
+
+    <div class="video-container">
+      <video id="camera" autoplay playsinline></video>
+      <div id="guide-box"></div>
+    </div>
+
+    <button id="capture-btn">📸 Capture Manually</button>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+    <img id="preview" style="display: none;" />
+    <div>
+      <button id="send-btn" style="display: none;">🚀 Match Locally</button>
+      <button id="retake-btn" style="display: none;">🔄 Retake</button>
+      <button id="download-btn" style="display: none;">💾 Download</button>
+    </div>
+
+    <div id="local-save">
+      <input type="text" id="fingerprint-name" placeholder="Enter your name" />
+      <button id="save-local-btn">💾 Save Locally</button>
+    </div>
+
+    <pre id="response"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
