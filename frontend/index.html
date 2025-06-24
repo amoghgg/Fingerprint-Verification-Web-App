@@ -78,21 +78,9 @@
       font-size: 0.9rem;
       white-space: pre-wrap;
       margin-top: 1rem;
-    }
-
-    #local-save {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 1rem;
-    }
-
-    #fingerprint-name {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 80%;
-      margin-bottom: 0.5rem;
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -100,7 +88,6 @@
   <div class="container">
     <h1>Fingerprint Verification</h1>
     <input type="file" id="fingerprint-input" accept="image/png, image/jpeg" />
-
     <p id="instruction">📍 Place your thumb in the center box</p>
     <img id="thumb-demo" src="thumb-demo.png" alt="Thumb Demo" />
 
@@ -109,20 +96,18 @@
       <div id="guide-box"></div>
     </div>
 
-    <button id="capture-btn">📸 Capture Manually</button>
-
     <canvas id="canvas" style="display: none;"></canvas>
     <img id="preview" style="display: none;" />
-    <div>
-      <button id="send-btn" style="display: none;">🚀 Match Locally</button>
-      <button id="retake-btn" style="display: none;">🔄 Retake</button>
-      <button id="download-btn" style="display: none;">💾 Download</button>
+
+    <div style="margin-top: 1rem">
+      <input type="text" id="fingerprint-name" placeholder="Enter name (optional)" style="padding: 8px; width: 80%; border-radius: 6px; border: 1px solid #ccc;" />
     </div>
 
-    <div id="local-save">
-      <input type="text" id="fingerprint-name" placeholder="Enter your name" />
-      <button id="save-local-btn">💾 Save Locally</button>
-    </div>
+    <button id="capture-btn">📸 Capture</button>
+    <button id="send-btn" style="display: none;">✅ Verify</button>
+    <button id="retake-btn" style="display: none;">🔁 Retake</button>
+    <button id="download-btn" style="display: none;">⬇️ Download</button>
+    <button id="save-local-btn">💾 Save Locally</button>
 
     <pre id="response"></pre>
   </div>

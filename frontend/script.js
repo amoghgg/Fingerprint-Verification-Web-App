@@ -99,41 +99,24 @@ async function detectThumb() {
 })();
 
 sendBtn.addEventListener("click", () => {
-  const currentImage = preview.src;
-  const allKeys = Object.keys(localStorage).filter(k => k.startsWith("fingerprint_"));
-  let bestMatch = { name: null, score: 0 };
+  const base64String = preview.src.split(",")[1];
 
-  const img1 = new Image();
-  img1.onload = () => {
-    canvas.width = img1.width;
-    canvas.height = img1.height;
-    ctx.drawImage(img1, 0, 0);
-    const data1 = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-    allKeys.forEach(key => {
-      const img2 = new Image();
-      img2.onload = () => {
-        ctx.drawImage(img2, 0, 0);
-        const data2 = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-        let matches = 0;
-        for (let i = 0; i < data1.length; i += 4) {
-          const diff = Math.abs(data1[i] - data2[i]) + Math.abs(data1[i+1] - data2[i+1]) + Math.abs(data1[i+2] - data2[i+2]);
-          if (diff < 30) matches++;
-        }
-        const score = matches / (data1.length / 4);
-        if (score > bestMatch.score) {
-          bestMatch = { name: key.replace("fingerprint_", ""), score };
-        }
-        document.getElementById("response").textContent =
-          bestMatch.score > 0.85
-            ? `✅ Match: ${bestMatch.name} (${(bestMatch.score * 100).toFixed(1)}%)`
-            : "❌ No match found";
-      };
-      img2.src = localStorage.getItem(key);
+  fetch("http://127.0.0.1:8000/verify-fingerprint/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ fingerprint: base64String })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("📨 Response from backend:", data);
+      document.getElementById("response").textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(err => {
+      console.error("❌ Error sending fingerprint:", err);
+      alert("Failed to send fingerprint to server.");
     });
-  };
-  img1.src = currentImage;
 });
 
 retakeBtn.addEventListener("click", () => {

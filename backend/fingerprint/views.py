@@ -16,6 +16,7 @@ def verify_fingerprint(request):
                 print("⚠️ No fingerprint provided.")
                 return JsonResponse({"error": "No fingerprint provided"}, status=400)
 
+            # Construct payload
             payload = {
                 "Person": {
                     "CustomID": "1234",
@@ -28,9 +29,10 @@ def verify_fingerprint(request):
                 }
             }
 
+            # Updated BioPass API key
             headers = {
                 "Content-Type": "application/json",
-                "Ocp-Apim-Subscription-Key": "835a8a583ff94f83a35a18c15f2256ef"  # replace with your latest key
+                "Ocp-Apim-Subscription-Key": "2d32a11ac4204166802326fe014d558a"
             }
 
             biopass_url = "https://hml-api.biopassid.com/multibiometrics/enroll"
@@ -45,21 +47,4 @@ def verify_fingerprint(request):
             print("❌ Exception occurred:", str(e))
             return JsonResponse({"error": str(e)}, status=500)
 
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    return JsonResponse({"error": "Invalid request method"}, status=405)
