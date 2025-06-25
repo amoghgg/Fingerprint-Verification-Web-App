@@ -16,32 +16,41 @@ def verify_fingerprint(request):
                 print("⚠️ No fingerprint provided.")
                 return JsonResponse({"error": "No fingerprint provided"}, status=400)
 
-            # Construct payload
+            # ✅ Production-ready payload
             payload = {
                 "Person": {
                     "CustomID": "1234",
                     "Fingerprints": [
                         {
-                            "Position": "Fingerprint-1",
+                            "Position": "LEFT_THUMB",
                             "Image": fingerprint_base64
                         }
                     ]
                 }
             }
 
-            # Updated BioPass API key
             headers = {
                 "Content-Type": "application/json",
                 "Ocp-Apim-Subscription-Key": "2d32a11ac4204166802326fe014d558a"
             }
 
-            biopass_url = "https://hml-api.biopassid.com/multibiometrics/enroll"
+            biopass_url = "https://api.biopassid.com/multibiometrics/enroll"
 
             print("📤 Sending request to BioPass...")
+            print("🔐 Payload:", json.dumps(payload, indent=2))
+
             response = requests.post(biopass_url, headers=headers, json=payload)
 
-            print("✅ BioPass response:", response.status_code, response.text)
-            return JsonResponse(response.json(), status=response.status_code)
+            print("✅ BioPass response status:", response.status_code)
+            print("📄 Raw response content:\n", response.text)
+
+            try:
+                return JsonResponse(response.json(), status=response.status_code)
+            except ValueError:
+                return JsonResponse({
+                    "error": "Invalid JSON returned from BioPass",
+                    "raw_response": response.text
+                }, status=response.status_code)
 
         except Exception as e:
             print("❌ Exception occurred:", str(e))
